@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { City, Flight, RouteResult, OptimizationPriority } from "@/types/flight";
+import { City, Flight, RouteResult, OptimizationPriority, CustomWeights } from "@/types/flight";
 import { CityManager } from "@/components/CityManager";
 import { FlightManager } from "@/components/FlightManager";
 import { RouteSearch } from "@/components/RouteSearch";
@@ -52,7 +52,7 @@ const Index = () => {
   };
   // -----------------------------
 
-  const handleSearch = (source: string, destination: string, priority: OptimizationPriority) => {
+  const handleSearch = (source: string, destination: string, priority: OptimizationPriority, customWeights?: CustomWeights) => {
     if (flights.length === 0) {
       toast.error("Please add some flights first");
       return;
@@ -66,7 +66,8 @@ const Index = () => {
       flights,
       source,
       destination,
-      priority
+      priority,
+      customWeights
     );
 
     setSearchResult({ result, source, destination });

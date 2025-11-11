@@ -1,4 +1,4 @@
-import { Flight, RouteResult, OptimizationPriority } from "@/types/flight";
+import { Flight, RouteResult, OptimizationPriority, CustomWeights } from "@/types/flight";
 
 interface Node {
   city: string;
@@ -13,7 +13,8 @@ export function findOptimalRoute(
   flights: Flight[],
   source: string,
   destination: string,
-  priority: OptimizationPriority = 'cost'
+  priority: OptimizationPriority = 'cost',
+  customWeights?: CustomWeights
 ): RouteResult | null {
   const cityIndex = new Map<string, number>();
   cities.forEach((city, idx) => cityIndex.set(city, idx));
@@ -48,6 +49,19 @@ export function findOptimalRoute(
 
   // Helper to get metric value based on priority
   const getMetric = (flight: Flight): number => {
+    if (priority === 'custom' && customWeights) {
+      // Calculate weighted sum: normalize each metric and apply weight
+      const normalizedCost = flight.cost / 1000; // Assuming max cost ~1000
+      const normalizedTime = flight.duration / 500; // Assuming max duration ~500 min
+      const normalizedDistance = (flight.distance || flight.duration * 10) / 5000; // Assuming max ~5000km
+      
+      return (
+        normalizedCost * (customWeights.cost / 100) +
+        normalizedTime * (customWeights.time / 100) +
+        normalizedDistance * (customWeights.distance / 100)
+      );
+    }
+    
     switch (priority) {
       case 'cost':
         return flight.cost;
@@ -70,6 +84,20 @@ export function findOptimalRoute(
   while (pq.length > 0) {
     // Sort by the chosen priority metric
     pq.sort((a, b) => {
+      if (priority === 'custom' && customWeights) {
+        const getNodeMetric = (node: Node) => {
+          const normalizedCost = node.cost / 1000;
+          const normalizedTime = node.duration / 500;
+          const normalizedDistance = node.distance / 5000;
+          return (
+            normalizedCost * (customWeights.cost / 100) +
+            normalizedTime * (customWeights.time / 100) +
+            normalizedDistance * (customWeights.distance / 100)
+          );
+        };
+        return getNodeMetric(a) - getNodeMetric(b);
+      }
+      
       switch (priority) {
         case 'cost':
           return a.cost - b.cost;

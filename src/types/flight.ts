@@ -1,6 +1,12 @@
 // /types/flight.d.ts
 
-export type OptimizationPriority = 'cost' | 'time' | 'distance';
+export type OptimizationPriority = 'cost' | 'time' | 'distance' | 'custom';
+
+export interface CustomWeights {
+  cost: number;
+  time: number;
+  distance: number;
+}
 
 export interface City {
   id: string; // Used for React keys and internal management (e.g., Date.now().toString())
