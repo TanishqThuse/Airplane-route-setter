@@ -49,7 +49,7 @@ export function RouteResults({ result, source, destination }: RouteResultsProps)
               <DollarSign className="w-8 h-8 text-primary" />
               <div>
                 <p className="text-sm text-muted-foreground">Total Cost</p>
-                <p className="text-2xl font-bold text-navy">₹{result.totalCost.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-navy">{result.totalCost.toLocaleString()}</p>
               </div>
             </div>
 

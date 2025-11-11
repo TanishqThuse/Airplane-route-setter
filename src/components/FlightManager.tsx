@@ -223,7 +223,7 @@ export function FlightManager({ cities, flights, onAddFlight }: FlightManagerPro
                     <span>{flight.src}</span>
                     <span>→</span>
                     <span>{flight.dest}</span>
-                    <span className="text-primary font-semibold">₹{flight.cost}</span>
+                    <span className="text-primary font-semibold">${flight.cost}</span>
                   </div>
                 </div>
               ))}
