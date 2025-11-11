@@ -1,20 +1,22 @@
 import { useState } from "react";
-import { City } from "@/types/flight";
+import { City, OptimizationPriority } from "@/types/flight";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Search, ArrowRight } from "lucide-react";
+import { Search, ArrowRight, DollarSign, Clock, MapPin } from "lucide-react";
 import { toast } from "sonner";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface RouteSearchProps {
   cities: City[];
-  onSearch: (source: string, destination: string) => void;
+  onSearch: (source: string, destination: string, priority: OptimizationPriority) => void;
 }
 
 export function RouteSearch({ cities, onSearch }: RouteSearchProps) {
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
+  const [priority, setPriority] = useState<OptimizationPriority>('cost');
 
   const handleSearch = () => {
     if (!source || !destination) {
@@ -27,7 +29,7 @@ export function RouteSearch({ cities, onSearch }: RouteSearchProps) {
       return;
     }
 
-    onSearch(source, destination);
+    onSearch(source, destination, priority);
   };
 
   if (cities.length < 2) {
@@ -45,7 +47,33 @@ export function RouteSearch({ cities, onSearch }: RouteSearchProps) {
           Search for the most cost-effective flight path
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
+        {/* Priority Selection */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">Optimization Priority</Label>
+          <Tabs value={priority} onValueChange={(v) => setPriority(v as OptimizationPriority)} className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="cost" className="gap-2">
+                <DollarSign className="w-4 h-4" />
+                Cost
+              </TabsTrigger>
+              <TabsTrigger value="time" className="gap-2">
+                <Clock className="w-4 h-4" />
+                Time
+              </TabsTrigger>
+              <TabsTrigger value="distance" className="gap-2">
+                <MapPin className="w-4 h-4" />
+                Distance
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <p className="text-xs text-muted-foreground">
+            {priority === 'cost' && 'Find the most economical route'}
+            {priority === 'time' && 'Find the fastest route'}
+            {priority === 'distance' && 'Find the shortest distance route'}
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-end">
           <div className="space-y-2">
             <Label>From</Label>

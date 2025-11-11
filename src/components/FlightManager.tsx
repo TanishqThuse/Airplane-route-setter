@@ -23,6 +23,7 @@ export function FlightManager({ cities, flights, onAddFlight }: FlightManagerPro
     dest: "",
     cost: "",
     duration: "",
+    distance: "",
     depTime: "",
     arrTime: "",
     isTwoWay: false,
@@ -48,6 +49,7 @@ export function FlightManager({ cities, flights, onAddFlight }: FlightManagerPro
       dest: formData.dest,
       cost: parseInt(formData.cost),
       duration: parseInt(formData.duration),
+      distance: formData.distance ? parseInt(formData.distance) : undefined,
       depTime: formData.depTime,
       arrTime: formData.arrTime,
       isTwoWay: formData.isTwoWay,
@@ -61,6 +63,7 @@ export function FlightManager({ cities, flights, onAddFlight }: FlightManagerPro
       dest: "",
       cost: "",
       duration: "",
+      distance: "",
       depTime: "",
       arrTime: "",
       isTwoWay: false,
@@ -150,7 +153,7 @@ export function FlightManager({ cities, flights, onAddFlight }: FlightManagerPro
           </div>
 
           <div className="space-y-2">
-            <Label>Cost (₹)</Label>
+            <Label>Cost ($)</Label>
             <Input
               type="number"
               placeholder="5000"
@@ -160,12 +163,22 @@ export function FlightManager({ cities, flights, onAddFlight }: FlightManagerPro
           </div>
 
           <div className="space-y-2">
-            <Label>Duration (minutes)</Label>
+            <Label>Duration (min)</Label>
             <Input
               type="number"
               placeholder="120"
               value={formData.duration}
               onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Distance (km)</Label>
+            <Input
+              type="number"
+              placeholder="1000"
+              value={formData.distance}
+              onChange={(e) => setFormData({ ...formData, distance: e.target.value })}
             />
           </div>
 

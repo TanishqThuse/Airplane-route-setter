@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { City, Flight, RouteResult } from "@/types/flight";
+import { City, Flight, RouteResult, OptimizationPriority } from "@/types/flight";
 import { CityManager } from "@/components/CityManager";
 import { FlightManager } from "@/components/FlightManager";
 import { RouteSearch } from "@/components/RouteSearch";
@@ -52,7 +52,7 @@ const Index = () => {
   };
   // -----------------------------
 
-  const handleSearch = (source: string, destination: string) => {
+  const handleSearch = (source: string, destination: string, priority: OptimizationPriority) => {
     if (flights.length === 0) {
       toast.error("Please add some flights first");
       return;
@@ -65,13 +65,15 @@ const Index = () => {
       cities.map(c => c.name),
       flights,
       source,
-      destination
+      destination,
+      priority
     );
 
     setSearchResult({ result, source, destination });
 
     if (result) {
-      toast.success("Optimal route found!");
+      const priorityText = priority === 'cost' ? 'cost-effective' : priority === 'time' ? 'fastest' : 'shortest';
+      toast.success(`Optimal ${priorityText} route found!`);
       setShowOptimalPath(true); // Automatically show the path on successful search
     } else {
       toast.error("No route available");

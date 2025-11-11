@@ -1,5 +1,7 @@
 // /types/flight.d.ts
 
+export type OptimizationPriority = 'cost' | 'time' | 'distance';
+
 export interface City {
   id: string; // Used for React keys and internal management (e.g., Date.now().toString())
   name: string;
@@ -13,6 +15,7 @@ export interface Flight {
   dest: string; // City name (string)
   cost: number;
   duration: number; // in minutes
+  distance?: number; // in km (optional, defaults to duration * 10)
   depTime: string; // e.g., "08:00"
   arrTime: string; // e.g., "10:00"
   isTwoWay: boolean;
